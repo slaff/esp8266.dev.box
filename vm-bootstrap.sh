@@ -16,7 +16,7 @@ cd /opt/
 
 IS_EMPTY=`find Espressif/ -maxdepth 0 -empty -exec echo -n 1 \;`
 if [ "$IS_EMPTY" == "1" ]; then
-	git clone https://github.com/pfalcon/esp-open-sdk.git Espressif
+  git clone https://github.com/pfalcon/esp-open-sdk.git Espressif
 fi
 cd Espressif
 git pull
@@ -30,16 +30,16 @@ export PATH=$PWD/xtensa-lx106-elf/bin/:$PATH
 PROFILE_CONF="/etc/profile.d/esp8266.sh"
 
 if [ ! -r  "$PROFILE_CONF" ]; then
-	sudo touch "$PROFILE_CONF"
-	sudo chown vagrant:vagrant "$PROFILE_CONF" 
+  sudo touch "$PROFILE_CONF"
+  sudo chown vagrant:vagrant "$PROFILE_CONF" 
 fi
 
 # Setup the cross compiler
-HAS_PATH=`cat $PROFILE_CONF | grep "$PWD/xtensa-lx106-elf/bin/:" || :`
+HAS_PATH=`cat $PROFILE_CONF | grep "# Add Xtensa Compiler Path" || :`
 if [ -z "$HAS_PATH" ]; then
   sudo echo "# Add Xtensa Compiler Path" >> $PROFILE_CONF
-  sudo echo "export PATH=$PWD/builds/xtensa-lx106-elf/bin/:\$PATH" >> $PROFILE_CONF
-  sudo echo "export XTENSA_TOOLS_ROOT=$PWD/builds/xtensa-lx106-elf/bin/" >> $PROFILE_CONF
+  sudo echo "export PATH=$PWD/xtensa-lx106-elf/bin/:\$PATH" >> $PROFILE_CONF
+  sudo echo "export XTENSA_TOOLS_ROOT=$PWD/xtensa-lx106-elf/bin/" >> $PROFILE_CONF
 fi
 
 cd $PWD/xtensa-lx106-elf/bin
@@ -77,14 +77,18 @@ fi
 
 # Install esptool-py
 sudo ln -sf /opt/Espressif/esptool/esptool.py /usr/local/bin/
+HAS_ESPTOOL=`cat $PROFILE_CONF | grep "export ESPTOOL" || :`
+if [ -z "$HAS_ESPTOOL" ]; then
+  sudo echo "export ESPTOOL=/usr/local/bin/esptool.py" >> $PROFILE_CONF
+fi
 
 # Compile the NodeMCU firmware
 if [ ! -d ~/dev ]; then
-	mkdir ~/dev
+  mkdir ~/dev
 fi
 cd ~/dev
 if [ ! -d ~/dev/nodemcu-firmware ]; then
-	git clone https://github.com/nodemcu/nodemcu-firmware.git
+  git clone https://github.com/nodemcu/nodemcu-firmware.git
 fi
 cd nodemcu-firmware
 git pull
@@ -93,7 +97,7 @@ make
 cd ~/dev
 # Compile the Micropython firmware
 if [ ! -d ~/dev/micropython ]; then
-	git clone https://github.com/micropython/micropython.git
+  git clone https://github.com/micropython/micropython.git
 fi
 cd ~/dev/micropython/esp8266
 git pull
