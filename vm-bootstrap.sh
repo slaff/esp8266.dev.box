@@ -27,12 +27,19 @@ make STANDALONE=y
 
 export PATH=$PWD/xtensa-lx106-elf/bin/:$PATH
 
+PROFILE_CONF="/etc/profile.d/esp8266.sh"
+
+if [ ! -r  "$PROFILE_CONF" ]; then
+	sudo touch "$PROFILE_CONF"
+	sudo chown vagrant:vagrant "$PROFILE_CONF" 
+fi
+
 # Setup the cross compiler
-HAS_PATH=`cat ~/.bashrc | grep "$PWD/xtensa-lx106-elf/bin/:" || :`
+HAS_PATH=`cat $PROFILE_CONF | grep "$PWD/xtensa-lx106-elf/bin/:" || :`
 if [ -z "$HAS_PATH" ]; then
-  echo "# Add Xtensa Compiler Path" >> ~/.bashrc
-  echo "export PATH=$PWD/builds/xtensa-lx106-elf/bin/:\$PATH" >> ~/.bashrc
-  echo "export XTENSA_TOOLS_ROOT=$PWD/builds/xtensa-lx106-elf/bin/" >> ~/.bashrc
+  sudo echo "# Add Xtensa Compiler Path" >> $PROFILE_CONF
+  sudo echo "export PATH=$PWD/builds/xtensa-lx106-elf/bin/:\$PATH" >> $PROFILE_CONF
+  sudo echo "export XTENSA_TOOLS_ROOT=$PWD/builds/xtensa-lx106-elf/bin/" >> $PROFILE_CONF
 fi
 
 cd $PWD/xtensa-lx106-elf/bin
@@ -46,24 +53,26 @@ done
 sudo ln -s xt-cc xt-xcc # the RTOS SDK needs it
 sudo chown vagrant -R /opt/Espressif/xtensa-lx106-elf/bin
 
-HAS_CROSS_COMPILE=`cat ~/.bashrc | grep "export CROSS_COMPILE" || :`
+HAS_CROSS_COMPILE=`cat $PROFILE_CONF | grep "export CROSS_COMPILE" || :`
 if [ -z "$HAS_CROSS_COMPILE" ]; then
-  echo "# Cross Compilation Settings" >> ~/.bashrc
-  echo "export CROSS_COMPILE=xtensa-lx106-elf-" >> ~/.bashrc
+  sudo echo "# Cross Compilation Settings" >> $PROFILE_CONF
+  sudo echo "export CROSS_COMPILE=xtensa-lx106-elf-" >> $PROFILE_CONF
 fi
 
-HAS_SDK_BASE=`cat ~/.bashrc | grep "export SDK_BASE" || :`
+HAS_SDK_BASE=`cat $PROFILE_CONF | grep "export SDK_BASE" || :`
 if [ -z "$HAS_SDK_BASE" ]; then
-  echo "# ESP8266 SDK Base" >> ~/.bashrc
-  echo "export SDK_BASE=/opt/Espressif/sdk/" >> ~/.bashrc
-  echo "export SDK_EXTRA_INCLUDES=/opt/Espressif/sdk/include/" >> ~/.bashrc
+  sudo echo "# ESP8266 SDK Base" >> $PROFILE_CONF
+  sudo echo "export SDK_BASE=/opt/Espressif/sdk/" >> $PROFILE_CONF
+  sudo echo "export SDK_EXTRA_INCLUDES=/opt/Espressif/sdk/include/" >> $PROFILE_CONF
 fi
 
 # Install ESP tool
-IS_ESPTOOL_INSTALLED=`dpkg -s esptool || echo ""`
+IS_ESPTOOL_INSTALLED=`dpkg -s esptool || :`
 if [ -z "$IS_ESPTOOL_INSTALLED" ]; then
+  cd /tmp
   wget -O esptool_0.0.2-1_i386.deb https://github.com/esp8266/esp8266-wiki/raw/master/deb/esptool_0.0.2-1_i386.deb
-  sudo dpkg -i /vagrant/tools/esptool_0.0.2-1_i386.deb
+  sudo dpkg -i /tmp/esptool_0.0.2-1_i386.deb
+  rm /tmp/esptool_0.0.2-1_i386.deb
 fi
 
 # Install esptool-py
