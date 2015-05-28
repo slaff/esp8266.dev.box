@@ -100,6 +100,10 @@ cd nodemcu-firmware
 git pull
 make
 
+if [ ! -x /opt/Espressif/sdk//tools/gen_appbin.py ]; then
+  sudo chmod a+x /opt/Espressif/sdk/tools/gen_appbin.py
+fi  
+
 cd ~/dev
 # Compile the Micropython firmware
 if [ ! -d ~/dev/micropython ]; then
