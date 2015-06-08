@@ -1,6 +1,12 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+module OS
+    def OS.windows?
+        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    end
+end
+
 $vendor_id  = '0x067b'
 $product_id = '0x2303'
 
@@ -13,8 +19,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = VM_HOSTNAME
   config.vm.box = "chef/ubuntu-14.04"
   config.vm.provision :shell, path: "vm-bootstrap.sh", privileged: false, args: "#{ENV['PROJECT']}"
-  config.vm.synced_folder "Espressif/", "/opt/Espressif", 
-    owner: "vagrant", group: "vagrant" 
+  
+  # The toolchain cannot be built on a case-insensitive file system.
+  if OS.windows?
+     puts "Under Windows the /opt/Espressif folder, where the toolchain is located, cannot be shared."
+  else
+     config.vm.synced_folder "Espressif/", "/opt/Espressif", owner: "vagrant", group: "vagrant" 	
+  end
+
   config.vm.synced_folder "dev/", "/home/vagrant/dev" 
   config.vm.synced_folder "project", "/opt/provision/project"
 

@@ -61,15 +61,29 @@ It is based on the open-sdk and includes some famous ESP projects like
 vagrant up
 ```
 This command can take 30 or more minutes on a decent hardware. But you should not worry because it is done only once. Most of it is spent building the cross-compiler.    
-2b. If you want to create the virtual machine, setup the SDK and test only one of the available projects then you can run vagrant with the following command:
+
+2b. If you want to create the virtual machine, setup the SDK and test only one of the available projects then you can run vagrant with the following command on Linux and MacOS X:
 ```bash
 PROJECT="sming" vagrant up
 ```
-You can replace "sming" in the command above with any of the available projects, like "micropython", "nodemcu" or "frankenstein".
 
-2c. If you want to create the virtual machine, setup the SDK and test all of the projects then run in the console
+Or the commands below for Windows
+```bash
+set PROJECT="sming"
+vagrant up
+```
+
+You can replace "sming" in the commands above with any of the available projects, like "micropython", "nodemcu" or "frankenstein".
+
+2c. If you want to create the virtual machine, setup the SDK and test all of the projects then run in the Linux or MacOS X console
 ```bash
 PROJECT="all" vagrant up
+```
+
+or the commands below for Windows
+```bash
+set PROJECT="all"
+vagrant up
 ```
 
 3. That's it! Now you can `vagrant ssh` and start building your images!
@@ -86,10 +100,23 @@ PROJECT="sming" vagrant provision
 ```
 To update the SDK and one of your projects.
 
+The respective syntax for Windows is:
+```bash
+set PROJECT="sming"
+vagrant provision
+```
+
 Or 
 ```bash
 PROJECT="all" vagrant provision
 ```
+
+The respective syntax for Windows is:
+```bash
+set PROJECT="all"
+vagrant provision
+```
+
 To update the SDK and all of your projects.
 
 ## USB access
