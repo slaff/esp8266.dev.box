@@ -12,10 +12,11 @@ VM_HOSTNAME = "esp8266.dev.box"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = VM_HOSTNAME
   config.vm.box = "chef/ubuntu-14.04"
-  config.vm.provision :shell, path: "vm-bootstrap.sh", privileged: false
+  config.vm.provision :shell, path: "vm-bootstrap.sh", privileged: false, args: "#{ENV['PROJECT']}"
   config.vm.synced_folder "Espressif/", "/opt/Espressif", 
     owner: "vagrant", group: "vagrant" 
   config.vm.synced_folder "dev/", "/home/vagrant/dev" 
+  config.vm.synced_folder "project", "/opt/provision/project"
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ['modifyvm', :id, '--usb', 'on']

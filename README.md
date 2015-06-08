@@ -6,9 +6,10 @@ environment for the [ESP8266](https://github.com/esp8266/esp8266-wiki) $5
 dollar "Internet of Things" WiFi module.
 It is based on the open-sdk and includes some famous ESP projects like 
 
-* NodeMCU
-* Micropython
-
+* NodeMCU (https://github.com/nodemcu/nodemcu-firmware)
+* Micropython (https://github.com/micropython/micropython)
+* Sming (https://github.com/anakod/Sming)
+* Frankenstein (https://github.com/nekromant/esp8266-frankenstein)
 
 ## What you'll need
 
@@ -55,19 +56,44 @@ It is based on the open-sdk and includes some famous ESP projects like
    variables in `Vagrantfile` to those values. They must be strings of the
    hexadecimal representations.
 
-2. In the console, run `vagrant up`. Note that this may take a decent chunk of
-   time -- it was ~30 minutes on my 2013 Macbook Pro. Most of it is spent
-   building the cross-compiler. Don't worry, it's a one-time cost.
+2a. If you want to create the virtual machine and setup the SDK,  without any ESP8266 projects, run in the console the following command:
+```bash
+vagrant up
+```
+This command can take 30 or more minutes on a decent hardware. But you should not worry because it is done only once. Most of it is spent building the cross-compiler.    
+2b. If you want to create the virtual machine, setup the SDK and test only one of the available projects then you can run vagrant with the following command:
+```bash
+PROJECT="sming" vagrant up
+```
+You can replace "sming" in the command above with any of the available projects, like "micropython", "nodemcu" or "frankenstein".
+
+2c. If you want to create the virtual machine, setup the SDK and test all of the projects then run in the console
+```bash
+PROJECT="all" vagrant up
+```
 
 3. That's it! Now you can `vagrant ssh` and start building your images!
 
+4. If you want to update the virtual machine you can run:
 
-## Sweet! ...now what?
+```bash
+vagrant provision
+```
 
-Well, if you're brand new to Vagrant, skip down a couple of sections for a very brief primer, then come back.
+Or 
+```bash
+PROJECT="sming" vagrant provision
+```
+To update the SDK and one of your projects.
 
-Oh hi! Wecome back! Now, if I were you, first thing I'd do is make sure my
-serial cable worked.  With it plugged in, `vagrant ssh` into the machine and
+Or 
+```bash
+PROJECT="all" vagrant provision
+```
+To update the SDK and all of your projects.
+
+## USB access
+Make sure the serial cable is working.  With it plugged in, `vagrant ssh` into the machine and
 run `lsusb` to make sure it's in your list of devices. To see where it's
 attached, run `dmesg` and somewhere near the bottom you should see something
 like `usb 1-1: pl2303 converter now attached to ttyUSB0`. If not, you might try
@@ -86,38 +112,6 @@ Then make sure to add that user into the vagrant group. This can be done with:
 sudo useradd -G vargrant {username}
 
 Replace {username} with the correct value. 
-
-Plug your ESP8266 into your serial interface and tie its CH_PD and GPIO0 pins
-HIGH. Pinouts, along with a ton of other info, can be found [on the esp8266
-wiki](https://github.com/esp8266/esp8266-wiki/wiki/Hardware_versions). Now
-power it on. You should see a bunch of garbage in your serial terminal,
-followed by the word `READY`. Type `AS+RST` and hit Enter, and you should get
-this back:
-
-    AT+RST
-    OK
-    
-    ets Jan  8 2013,rst cause:4, boot mode:(3,6)
-    
-    wdt reset
-    load 0x40100000, len 24236, room 16
-    tail 12
-    chksum 0xb7
-    ho 0 tail 12 room 4
-    load 0x3ffe8000, len 3008, room 12
-    tail 4
-    chksum 0x2c
-    load 0x3ffe8bc0, len 4816, room 4
-    tail 12
-    chksum 0x46
-    csum 0x46
-    
-    ready
-
-You're in business! Now the fun part -- you can either play around with [the AT
-commands](http://www.electrodragon.com/w/Wi07c#AT_Commands), or kill the
-console and go on to build...
-
 
 ## Vagrant tips, for the uninitiated
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -ex
 
+PROJECT="$1"
+
 # Prepare the machine
 sudo apt-get update
 sudo apt-get -y install git autoconf build-essential \
@@ -88,77 +90,24 @@ if [ -z "$HAS_ESPTOOL" ]; then
   sudo echo "export ESPPORT=/dev/ttyUSB0" >> $PROFILE_CONF
 fi
 
-# Compile the NodeMCU firmware
 if [ ! -d ~/dev ]; then
   mkdir ~/dev
 fi
-cd ~/dev
-if [ ! -d ~/dev/nodemcu-firmware ]; then
-  git clone https://github.com/nodemcu/nodemcu-firmware.git
-fi
-cd nodemcu-firmware
-git pull
-make
 
-if [ ! -x /opt/Espressif/sdk//tools/gen_appbin.py ]; then
+if [ ! -x /opt/Espressif/sdk/tools/gen_appbin.py ]; then
   sudo chmod a+x /opt/Espressif/sdk/tools/gen_appbin.py
-fi  
-
-cd ~/dev
-# Compile the Micropython firmware
-if [ ! -d ~/dev/micropython ]; then
-  git clone https://github.com/micropython/micropython.git
-fi
-cd ~/dev/micropython/esp8266
-git pull
-make V=1
-
-if [ ! -z "$COMPILE_FRANKENSTEIN" ]; then
-	# Compile Frankenstein Firmware
-	#   Check if we have kconf
-	KCONF="kconfig-conf";  
-	X=`whereis "$KCONF"`; 
-	if [ "$X" == "$KCONF:" ]; then 
-	  # we should install kconf
-	  cd /tmp
-	  wget http://ymorin.is-a-geek.org/download/kconfig-frontends/kconfig-frontends-3.12.0.0.tar.bz2
-	  tar xvjf kconfig-frontends-3.12.0.0.tar.bz2
-	  cd /tmp/kconfig-frontends-3.12.0.0
-	  make
-	  make install
-	fi
-
-	X=`whereis pl2303gpio`
-	if [ "$X" == "pl2303gpio:" ]; then 
-	  # we should install pl2303gpio
-	  sudo apt-get install libusb-dev pkg-config
-	  cd /tmp
-	  git clone https://github.com/nekromant/pl2303gpio.git
-	  cd pl2303gpio
-	  make
-	  sudo make install
-	fi
-
-
-	if [ ! -d ~/dev/esp8266-frankenstein ]; then
-	   git clone https://github.com/nekromant/esp8266-frankenstein.git
-	   cd ~/dev/esp8266-frankenstein
-	   make # initial make
-	fi 
-	cd ~/dev/esp8266-frankenstein
-	git pull
-	make
 fi
 
-# Compile the Sming firmware
-if [ ! -d ~/dev/Sming ]; then
-  git clone https://github.com/anakod/Sming.git
-  sudo echo "export ESP_HOME=/opt/Espressif" >> $PROFILE_CONF
-  sudo echo "export SMING_HOME=/home/vagrant/dev/Sming/Sming/" >> $PROFILE_CONF
-  sudo echo "export COM_PORT=/dev/ttyUSB0" >> $PROFILE_CONF
+source $PROFILE_CONF
+
+if [ ! -z "$PROJECT" ]; then
+  if [ "$PROJECT" == "all" ]; then
+    PROJECT="*"
+  fi
+  FILES=`find /opt/provision/project/$PROJECT -name provision.sh | sort`
+  echo "$FILES";
+  for i in $FILES; do
+    source $i
+  done 
 fi
-cd ~/dev/Sming
-git pull
-cd ~/dev/Sming/Sming
-make V=1
 
