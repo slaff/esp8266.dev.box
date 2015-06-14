@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+
+# Compile Spiffy
+if [ ! -d ~/dev/spiffy ]; then
+  git clone -b sming https://github.com/alonewolfx2/spiffy
+fi
+cd ~/dev/spiffy
+git pull
+if [ ! -d ~/dev/spiffy/build ]; then
+  mkdir build
+fi
+make 
+sudo ln -s /home/vagrant/dev/spiffy/build/spiffy /usr/local/bin/spiffy
+
+
 # Compile the Sming firmware
 if [ ! -d ~/dev/Sming ]; then
   cd ~/dev
