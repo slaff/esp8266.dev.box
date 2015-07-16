@@ -11,7 +11,7 @@ if [ ! -d ~/dev/spiffy/build ]; then
   mkdir build
 fi
 make 
-sudo ln -s /home/vagrant/dev/spiffy/build/spiffy /usr/local/bin/spiffy
+sudo ln -sf /home/vagrant/dev/spiffy/build/spiffy /usr/local/bin/spiffy
 
 
 # Compile the Sming firmware
