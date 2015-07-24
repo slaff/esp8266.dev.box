@@ -22,7 +22,8 @@ if [ "$IS_EMPTY" == "1" ]; then
 fi
 cd Espressif
 git pull
-git submodule update
+#git submodule update
+git fetch --recurse-submodules
 # TODO: if the build fails try to clean the code by uncommenting the line below
 # make clean
 make STANDALONE=y
