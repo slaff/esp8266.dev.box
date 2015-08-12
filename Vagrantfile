@@ -18,7 +18,7 @@ VM_HOSTNAME = "esp8266.dev.box"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = VM_HOSTNAME
   config.vm.box = "chef/ubuntu-14.04"
-  config.vm.provision :shell, path: "vm-bootstrap.sh", privileged: false, args: "#{ENV['PROJECT']}"
+  config.vm.provision :shell, path: "vm-bootstrap.sh", privileged: false, args: [ "#{ENV['PROJECT']}","#{ENV['SDK_VERSION']}" ]
   
   # The toolchain cannot be built on a case-insensitive file system.
   if OS.windows?

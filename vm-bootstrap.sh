@@ -2,6 +2,7 @@
 set -ex
 
 PROJECT="$1"
+SDK_VERSION="$2"
 
 # Prepare the machine
 sudo apt-get update
@@ -22,11 +23,15 @@ if [ "$IS_EMPTY" == "1" ]; then
 fi
 cd Espressif
 git pull
-#git submodule update
-git fetch --recurse-submodules
+git submodule sync
+git submodule update
 # TODO: if the build fails try to clean the code by uncommenting the line below
 # make clean
-make STANDALONE=y
+if [ -z "$SDK_VERSION" ]; then
+  make STANDALONE=y
+else
+  make STANDALONE=y VENDOR_SDK=$SDK_VERSION
+fi
 
 export PATH=$PWD/xtensa-lx106-elf/bin/:$PATH
 
