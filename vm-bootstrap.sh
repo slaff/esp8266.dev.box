@@ -17,8 +17,9 @@ sudo chown vagrant /opt/Espressif
 # Build the cross-compiler
 cd /opt/
 
-IS_EMPTY=`find Espressif/ -maxdepth 0 -empty -exec echo -n 1 \;`
-if [ "$IS_EMPTY" == "1" ]; then
+HAS_GIT=`ls -d Espressif/.git/ || :`
+if [ "$HAS_GIT" == "" ]; then
+  rm -f Espressif/.empty
   git clone https://github.com/pfalcon/esp-open-sdk.git Espressif
 fi
 cd Espressif

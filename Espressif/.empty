@@ -1,0 +1,2 @@
+This file is needed for git to create the Espressif folder.
+If the folder is not existing initially then Vagrant will refuse to mount it.
