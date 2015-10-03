@@ -10,6 +10,8 @@ It is based on the open-sdk and includes some famous ESP projects like
 * Micropython (https://github.com/micropython/micropython)
 * Sming (https://github.com/anakod/Sming)
 * Frankenstein (https://github.com/nekromant/esp8266-frankenstein)
+* Smart.JS (https://github.com/cesanta/smart.js)
+* Espruino (another JavaScript engine) (https://github.com/espruino/Espruino)
 
 ## What you'll need
 
@@ -73,7 +75,7 @@ set PROJECT="sming"
 vagrant up
 ```
 
-You can replace "sming" in the commands above with any of the available projects, like "micropython", "nodemcu" or "frankenstein".
+You can replace "sming" in the commands above with any of the available projects, like "micropython", "nodemcu", "frankenstein", "smart.js" or "espruino".
 
 2c. If you want to create the virtual machine, setup the SDK and test all of the projects then run in the Linux or MacOS X console
 ```bash
