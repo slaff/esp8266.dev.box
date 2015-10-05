@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-
 # Compile Spiffy
 if [ ! -d ~/dev/spiffy ]; then
+  cd ~/dev
   git clone -b sming https://github.com/alonewolfx2/spiffy
 fi
 cd ~/dev/spiffy
