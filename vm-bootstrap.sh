@@ -105,6 +105,9 @@ if [ ! -x /opt/Espressif/sdk/tools/gen_appbin.py ]; then
   sudo chmod a+x /opt/Espressif/sdk/tools/gen_appbin.py
 fi
 
+# the vagrant user should also be able to write to the device
+sudo adduser $USER dialout
+
 source $PROFILE_CONF
 
 if [ ! -z "$PROJECT" ]; then

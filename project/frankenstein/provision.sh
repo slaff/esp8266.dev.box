@@ -18,7 +18,7 @@ fi
 X=`whereis pl2303gpio`
 if [ "$X" == "pl2303gpio:" ]; then 
   # we should install pl2303gpio
-  sudo apt-get install libusb-dev pkg-config
+  sudo apt-get -y install libusb-1.0-0-dev pkg-config
   cd /tmp
   git clone https://github.com/nekromant/pl2303gpio.git
   cd pl2303gpio
@@ -27,12 +27,14 @@ if [ "$X" == "pl2303gpio:" ]; then
 fi
 
 
-if [ ! -d ~/dev/esp8266-frankenstein ]; then
+if [ ! -d ~/dev/frankenstein ]; then
    cd ~/dev
-   git clone https://github.com/nekromant/esp8266-frankenstein.git
-   cd ~/dev/esp8266-frankenstein
-   make # initial make
+   git clone https://github.com/nekromant/esp8266-frankenstein.git frankenstein
+   cd ~/dev/frankenstein
+   # Workaround for an issue with the make script.
+   git clone -b experimental https://nekromant@github.com/nekromant/antares.git
+   make defconfig # use default config
 fi 
-cd ~/dev/esp8266-frankenstein
+cd ~/dev/frankenstein
 git pull
 make

@@ -27,6 +27,22 @@ if [ -z "$HAS_SMING_HOME" ]; then
   sudo echo "export COM_PORT=/dev/ttyUSB0" >> $PROFILE_CONF
   source $PROFILE_CONF
 fi
+
+# rBoot Settings
+cd ~/dev
+if [ ! -e ~/dev/raburton-esp8266 ]; then
+  git clone https://github.com/raburton/esp8266 raburton-esp8266
+fi
+cd ~/dev/raburton-esp8266/esptool2
+export XTENSA_BINDIR=$XTENSA_TOOLS_ROOT
+make 
+
+HAS_ESPTOOL2=`cat $PROFILE_CONF | grep ESPTOOL2 || :`
+if [ -z "$HAS_ESPTOOL2" ]; then
+  sudo echo "export ESPTOOL2=`pwd`/esptool2" >>  $PROFILE_CONF
+  source $PROFILE_CONF
+fi 
+
 cd ~/dev/Sming
 git pull
 cd ~/dev/Sming/Sming

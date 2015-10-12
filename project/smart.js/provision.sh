@@ -7,6 +7,12 @@ if [ ! -d ~/dev/smart.js ]; then
   git clone https://github.com/cesanta/smart.js.git
 fi
 
+HAS_SETTINGS=`cat "$PROFILE_CONF" | grep SDK_FLAVOUR || :`
+if [ -z "$HAS_SETTINGS" ]; then
+  sudo echo "export SDK_FLAVOUR=OSS" >> $PROFILE_CONF
+  source $PROFILE_CONF
+fi
+
 cd ~/dev/smart.js
 git pull
 
