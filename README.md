@@ -68,14 +68,15 @@ This command can take 30 or more minutes on a decent hardware. But you should no
 ```bash
 PROJECT="sming" vagrant up
 ```
+You can replace "sming" in the commands above with any of the available projects, like "micropython", "nodemcu", "frankenstein", "smart.js" or "espruino".
 
 Or the commands below for Windows
 ```bash
-set PROJECT="sming"
+set PROJECT=sming
 vagrant up
 ```
+You can replace sming in the commands above with any of the available projects, like micropython, nodemcu, frankenstein, smart.js or espruino.
 
-You can replace "sming" in the commands above with any of the available projects, like "micropython", "nodemcu", "frankenstein", "smart.js" or "espruino".
 
 2c. If you want to create the virtual machine, setup the SDK and test all of the projects then run in the Linux or MacOS X console
 ```bash
@@ -84,7 +85,7 @@ PROJECT="all" vagrant up
 
 or the commands below for Windows
 ```bash
-set PROJECT="all"
+set PROJECT=all
 vagrant up
 ```
 
@@ -115,7 +116,7 @@ PROJECT="all" vagrant provision
 
 The respective syntax for Windows is:
 ```bash
-set PROJECT="all"
+set PROJECT=all
 vagrant provision
 ```
 

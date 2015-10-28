@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      config.vm.synced_folder "Espressif/", "/opt/Espressif", owner: "vagrant", group: "vagrant" 	
   end
 
-  config.vm.synced_folder "dev/", "/home/vagrant/dev" 
+  config.vm.synced_folder "dev", "/home/vagrant/dev" 
   config.vm.synced_folder "project", "/opt/provision/project"
 
   config.vm.provider :virtualbox do |vb|
