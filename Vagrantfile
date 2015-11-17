@@ -1,9 +1,19 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-module OS
-    def OS.windows?
-        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+require 'fileutils'
+
+module FS
+    def FS.caseSensitive?
+    	File.open(".caseSensitive.file", "w") {
+        	
+        }
+        result = true
+        if File.exists?(".CaseSensItive.fIle")
+        	result = false
+        end
+        File.delete(".caseSensitive.file");
+        return result
     end
 end
 
@@ -21,8 +31,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, path: "vm-bootstrap.sh", privileged: false, args: [ "#{ENV['PROJECT']}","#{ENV['SDK_VERSION']}" ]
   
   # The toolchain cannot be built on a case-insensitive file system.
-  if OS.windows?
-     puts "Under Windows the /opt/Espressif folder, where the toolchain is located, cannot be shared."
+  if !FS.caseSensitive?
+     puts "Your file system is case insensitive. The /opt/Espressif folder on the virtual machine, where the toolchain is located, cannot be shared with your real machine."
+     puts "Run 'vagrant provision' to get a copy of the latest C/C++, header and aseembler files needed for code completion in your IDE."
   else
      config.vm.synced_folder "Espressif/", "/opt/Espressif", owner: "vagrant", group: "vagrant" 	
   end

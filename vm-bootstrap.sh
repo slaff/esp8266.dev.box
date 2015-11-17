@@ -123,3 +123,14 @@ if [ ! -z "$PROJECT" ]; then
   done 
 fi
 
+# Check if the /opt/Expressif folder is shared. If not then copy to it the assembler, header, c and c++ files.
+touch /vagrant/Espressif/.caseSensitive.file
+if [ ! -e "/opt/Espressif/.caseSensitive.file" ]; then
+   # sync all useful files
+   sudo apt-get -y install rsync
+   SYNC_DIRS="sdk xtensa-lx106-elf"
+   for folder in $SYNC_DIRS; do
+     rsync -azvLr --delete --include '*/' -m  --include '**.h' --include='**.c' --include='**.cpp' --include='**.s' --exclude '*' /opt/Espressif/$folder /vagrant/Espressif
+   done
+fi  
+rm -f /vagrant/Expressif/.caseSensitive.file
