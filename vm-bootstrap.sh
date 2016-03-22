@@ -9,7 +9,8 @@ sudo apt-get update
 sudo apt-get -y install linux-image-extra-virtual linux-headers-virtual \
      git autoconf build-essential \
      gperf bison flex texinfo libtool libncurses5-dev \
-     wget gawk libc6-dev-amd64 python-serial libexpat-dev unzip
+     wget gawk libc6-dev-amd64 python-serial libexpat-dev unzip \
+	 cpp gcc g++
 sudo apt-get -y autoremove
 if [ ! -d /opt/Espressif ]; then
   sudo mkdir /opt/Espressif
