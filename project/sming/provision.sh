@@ -31,5 +31,10 @@ fi
 
 cd ~/dev/Sming
 git pull
+
+# Compile Spiffy first
+make -C ~/dev/Sming/Sming/spiffy
+
+# Compile sming
 cd ~/dev/Sming/Sming
 make V=1
