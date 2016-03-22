@@ -1,23 +1,9 @@
 #!/usr/bin/env bash
 
-# Compile Spiffy
-if [ ! -d ~/dev/spiffy ]; then
-  cd ~/dev
-  git clone -b sming https://github.com/alonewolfx2/spiffy
-fi
-cd ~/dev/spiffy
-git pull
-if [ ! -d ~/dev/spiffy/build ]; then
-  mkdir build
-fi
-make 
-sudo ln -sf /home/vagrant/dev/spiffy/build/spiffy /usr/local/bin/spiffy
-
-
 # Compile the Sming firmware
 if [ ! -d ~/dev/Sming ]; then
   cd ~/dev
-  git clone https://github.com/anakod/Sming.git
+  git clone https://github.com/SmingHub/Sming.git -b develop
 fi
 
 HAS_SMING_HOME=`cat $PROFILE_CONF | grep SMING_HOME || :`
@@ -30,10 +16,10 @@ fi
 
 # rBoot Settings
 cd ~/dev
-if [ ! -e ~/dev/raburton-esp8266 ]; then
-  git clone https://github.com/raburton/esp8266 raburton-esp8266
+if [ ! -e ~/dev/raburton-esptool2 ]; then
+  git clone https://github.com/raburton/esptool2.git raburton-esptool2
 fi
-cd ~/dev/raburton-esp8266/esptool2
+cd ~/dev/raburton-esptool2
 export XTENSA_BINDIR=$XTENSA_TOOLS_ROOT
 make 
 
